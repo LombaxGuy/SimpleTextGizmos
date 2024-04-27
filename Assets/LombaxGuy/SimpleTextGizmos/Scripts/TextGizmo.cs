@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Niila.Utility
+namespace LombaxGuy.SimpleTextGizmos
 {
-    public static class GizmoUtility
+    public static class TextGizmo
     {
         private enum DrawType { ContinousLine, LinePieces }
 
@@ -595,7 +595,7 @@ namespace Niila.Utility
                 2, 5
             }
         };
-        private static readonly PointArray POINTS_APOSTROPHE = new PointArray
+        private static readonly PointArray POINTS_GRAVE_ACCENT = new PointArray
         {
             DrawType = DrawType.LinePieces,
             Points = new float[]
@@ -604,7 +604,7 @@ namespace Niila.Utility
                 2, 5
             }
         };
-        private static readonly PointArray POINTS_APOSTROPHE_BACK = new PointArray
+        private static readonly PointArray POINTS_ACUTE_ACCENT = new PointArray
         {
             DrawType = DrawType.LinePieces,
             Points = new float[]
@@ -1802,7 +1802,7 @@ namespace Niila.Utility
         #endregion
 
         #region Private static and const fields
-        // the size of the characters in the character definitions
+        // the size of the characters in the point arrays
         private const float CHARACTER_WIDTH = 3.0f;
         private const float CHARACTER_HEIGHT = 6.0f;
         private const float CHARACTER_SPACING = 0.5f;
@@ -1842,8 +1842,8 @@ namespace Niila.Utility
             { '_', POINTS_UNDERSCORE },
             { '\'', POINTS_SINGLE_QUOTE },
             { '"', POINTS_DOUBLE_QUOTE },
-            { '`', POINTS_APOSTROPHE },
-            { '´', POINTS_APOSTROPHE_BACK },
+            { '`', POINTS_GRAVE_ACCENT },
+            { '´', POINTS_ACUTE_ACCENT },
             { '\\', POINTS_BACKSLASH },
             { '[', POINTS_OPEN_SQUAREBRACKET },
             { ']', POINTS_CLOSE_SQUAREBRACKET },
@@ -1925,10 +1925,10 @@ namespace Niila.Utility
         /// <param name="center">Should the text be centered on the position?</param>
         /// <param name="drawDistance">The distance to the scene view camera at which the gizmo is drawn. A value below 0 means that the gizmo is always drawn.</param>
         /// <param name="neverCull">Set this to true if you want the gizmo to draw even when off screen (from the scene views perspective).</param>
-        public static void DrawString(string text, Vector3 position, float scale = 1.0f, bool center = true, float drawDistance = -1, bool neverCull = false)
+        public static void Draw(string text, Vector3 position, float scale = 1.0f, bool center = true, float drawDistance = -1, bool neverCull = false)
         {
 #if UNITY_EDITOR
-            DrawString(text, position, Vector3.zero, scale, center, drawDistance, neverCull);
+            Draw(text, position, Vector3.zero, scale, center, drawDistance, neverCull);
 #endif
         }
 
@@ -1942,7 +1942,7 @@ namespace Niila.Utility
         /// <param name="center">Should the text be centered on the position?</param>
         /// <param name="drawDistance">The distance to the scene view camera at which the gizmo is drawn. A value below 0 means that the gizmo is always drawn.</param>
         /// <param name="neverCull">Set this to true if you want the gizmo to draw even when off screen (from the scene views perspective).</param>
-        public static void DrawString(string text, Vector3 position, Vector3 eulerRotation, float scale = 1.0f, bool center = true, float drawDistance = -1, bool neverCull = false)
+        public static void Draw(string text, Vector3 position, Vector3 eulerRotation, float scale = 1.0f, bool center = true, float drawDistance = -1, bool neverCull = false)
         {
 #if UNITY_EDITOR
             var camera = UnityEditor.SceneView.currentDrawingSceneView.camera;
@@ -2002,9 +2002,27 @@ namespace Niila.Utility
             }
 
             if (pointArray.DrawType == DrawType.ContinousLine)
+            {
+#if UNITY_2022_2_OR_NEWER
                 Gizmos.DrawLineStrip(new ReadOnlySpan<Vector3>(_pointsBuffer, 0, _bufferedPointCount), false);
+#else
+                for (int i = 1; i < _bufferedPointCount; i++)
+                {
+                    Gizmos.DrawLine(_pointsBuffer[i - 1], _pointsBuffer[i]);
+                }
+#endif
+            }
             else
+            {
+#if UNITY_2022_2_OR_NEWER
                 Gizmos.DrawLineList(new ReadOnlySpan<Vector3>(_pointsBuffer, 0, _bufferedPointCount));
+#else
+                for (int i = 1; i < _bufferedPointCount; i += 2)
+                {
+                    Gizmos.DrawLine(_pointsBuffer[i - 1], _pointsBuffer[i]);
+                }
+#endif
+            }
         }
 
         /// <summary>
@@ -2035,6 +2053,6 @@ namespace Niila.Utility
             else
                 return value > min && value < max;
         }
-        #endregion
+#endregion
     }
 }
