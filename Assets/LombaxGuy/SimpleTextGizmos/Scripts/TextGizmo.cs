@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LombaxGuy.SimpleTextGizmos
+namespace LombaxGuy.STG
 {
     public static class TextGizmo
     {
