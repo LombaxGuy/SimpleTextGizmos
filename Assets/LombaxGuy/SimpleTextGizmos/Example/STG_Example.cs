@@ -5,21 +5,35 @@ namespace LombaxGuy.Examples
 {
     public class STG_Example : MonoBehaviour
     {
-        private Vector3[][] grid;
+        #region Public fields
+        [Header("References")]
+        public Transform _player;
+        public Transform _enemy;
+
+        [Header("Settings")]
+        public bool _showGrid = true;
+        public bool _showPlayer = true;
+        public bool _showEnemy = true;
+        #endregion
+
+        #region Private fields
+        private Vector3[][] _grid;
+        #endregion
 
         private void OnValidate()
         {
-            if (grid == null)
+            // create grid if it doesn't exist
+            if (_grid == null)
             {
-                grid = new Vector3[10][];
+                _grid = new Vector3[10][];
 
                 for (int y = 0; y < 10; y++)
                 {
-                    grid[y] = new Vector3[10];
+                    _grid[y] = new Vector3[10];
 
                     for (int x = 0; x < 10; x++)
                     {
-                        grid[y][x] = new Vector3(x, y);
+                        _grid[y][x] = new Vector3(x, y);
                     }
                 }
             }
@@ -27,19 +41,42 @@ namespace LombaxGuy.Examples
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.black;
-
-            for (int y = 0; y < grid.Length; y++)
+            #region Grid
+            if (_showGrid)
             {
-                for (int x = 0; x < grid[y].Length; x++)
+                Gizmos.color = Color.black;
+
+                for (int y = 0; y < _grid.Length; y++)
                 {
-                    TextGizmo.Draw($"({x}, {y})", new Vector3(x + .5f, 0, y + .5f), new Vector3(90, 0), 0.2f);
+                    for (int x = 0; x < _grid[y].Length; x++)
+                    {
+                        TextGizmo.Draw($"({x}, {y})", new Vector3(x + .5f, 0, y + .5f), new Vector3(90, 0), 0.2f);
+                    }
                 }
             }
+            #endregion
 
-            Gizmos.color = Color.white;
+            #region Player
+            if (_showPlayer)
+            {
+                Gizmos.color = Color.black;
+                TextGizmo.Draw("Player", _player.position + new Vector3(0, 1.5f), 0.2f, true);
 
-            TextGizmo.Draw("Simple Text Gizmos", new Vector3(1.5f, 4.0f, 1.5f), new Vector3(30, 45, 0), 0.8f);
+                Gizmos.color = Color.red;
+                TextGizmo.Draw("HP: 2 / 10", _player.position + new Vector3(0, 1.2f), 0.2f, true);
+            }
+            #endregion
+
+            #region Enemy
+            if (_showEnemy)
+            {
+                Gizmos.color = Color.black;
+                TextGizmo.Draw("Scary Enemy", _enemy.position + new Vector3(0, 1.5f), new Vector3(0, 90, 0), 0.2f, true);
+
+                Gizmos.color = Color.green;
+                TextGizmo.Draw("HP: 100 / 100", _enemy.position + new Vector3(0, 1.2f), new Vector3(0, 90, 0), 0.2f, true);
+            }
+            #endregion
         }
     }
 }

@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/LombaxGuy/SimpleTextGizmos/Example/STG_Example.unity
+    guid: 52a2db68dde0a884585e706418fd706a
   m_configObjects: {}
