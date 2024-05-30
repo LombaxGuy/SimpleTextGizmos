@@ -11,6 +11,7 @@ namespace LombaxGuy.Examples
         public Transform _enemy;
 
         [Header("Settings")]
+        public bool _showSequence = true;
         public bool _showGrid = true;
         public bool _showPlayer = true;
         public bool _showEnemy = true;
@@ -41,6 +42,13 @@ namespace LombaxGuy.Examples
 
         private void OnDrawGizmos()
         {
+            #region Sequence
+            Gizmos.color = Color.black;
+
+            TextGizmo.Draw("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz", Vector3.right * 5 + Vector3.back * 0.2f, Vector3.right * 90, 0.2f, neverCull: true);
+            TextGizmo.Draw("0123456789", Vector3.right * 5 + Vector3.back * 0.5f, Vector3.right * 90, 0.2f, neverCull: true);
+            #endregion
+
             #region Grid
             if (_showGrid)
             {
