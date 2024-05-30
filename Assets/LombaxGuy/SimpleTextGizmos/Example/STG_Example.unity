@@ -427,7 +427,7 @@ GameObject:
   - component: {fileID: 1225152459}
   - component: {fileID: 1225152458}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Gizmo Drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,6 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 1302497468}
   _enemy: {fileID: 82061236}
+  _showSequence: 1
   _showGrid: 1
   _showPlayer: 1
   _showEnemy: 1
