@@ -1947,7 +1947,14 @@ namespace LombaxGuy.STG
         public static void Draw(string text, Vector3 position, Vector3 eulerRotation, float scale = 1.0f, bool center = true, float drawDistance = -1, bool neverCull = false)
         {
 #if UNITY_EDITOR
-            var camera = UnityEditor.SceneView.currentDrawingSceneView.camera;
+            Camera camera;
+            var sceneView = UnityEditor.SceneView.currentDrawingSceneView;
+
+            if (sceneView == null)
+                camera = Camera.main;
+            else
+                camera = UnityEditor.SceneView.currentDrawingSceneView.camera;
+
             var viewportPoint = camera.WorldToViewportPoint(position);
 
             // if the gizmo is off-screen and neverCull is not true, dont draw it
